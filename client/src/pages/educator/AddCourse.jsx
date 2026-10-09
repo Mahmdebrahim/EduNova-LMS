@@ -18,7 +18,6 @@ import { ClipLoader } from "react-spinners";
 import axiosInstance from "../../config/axios.config";
 import { useQueryClient } from "@tanstack/react-query";
 
-
 const emptyLecture = () => ({
   lectureTitle: "",
   lectureDuration: 0,
@@ -92,7 +91,7 @@ function AddCourse() {
     setCourseData((prev) => ({
       ...prev,
       courseContent: prev.courseContent.map((ch, i) =>
-        i === ci ? { ...ch, [field]: value } : ch,
+        i === ci ? { ...ch, [field]: value } : ch
       ),
     }));
   };
@@ -117,7 +116,7 @@ function AddCourse() {
                 },
               ],
             }
-          : ch,
+          : ch
       ),
     }));
   };
@@ -133,7 +132,7 @@ function AddCourse() {
                 .filter((_, j) => j !== li)
                 .map((lec, j) => ({ ...lec, lectureOrder: j + 1 })),
             }
-          : ch,
+          : ch
       ),
     }));
   };
@@ -146,10 +145,10 @@ function AddCourse() {
           ? {
               ...ch,
               chapterContent: ch.chapterContent.map((lec, j) =>
-                j === li ? { ...lec, [field]: value } : lec,
+                j === li ? { ...lec, [field]: value } : lec
               ),
             }
-          : ch,
+          : ch
       ),
     }));
   };
@@ -196,7 +195,7 @@ function AddCourse() {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-        },
+        }
       );
 
       if (data.course) {
@@ -222,11 +221,12 @@ function AddCourse() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
+    // تم التعديل: إضافة px-4 sm:px-6 لضمان هوامش جانبية آمنة على الموبايل
+    <div className="space-y-6 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <Toast ref={toastRef} />
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">Add New Course</h1>
           <p className="text-gray-500 text-sm mt-1">
@@ -235,11 +235,12 @@ function AddCourse() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      {/* تم التعديل: تغيير xl إلى lg ليظهر الشريط الجانبي بجانب المحتوى على شاشات التابلت والمتوسطة */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left — Main Info */}
-        <div className="xl:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6">
           {/* Basic Info */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             <h2 className="text-base font-semibold text-gray-800 mb-4">
               Basic Information
             </h2>
@@ -260,16 +261,19 @@ function AddCourse() {
               </div>
 
               {/* Price + Discount */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* تم التعديل: grid-cols-1 للموبايل، sm:grid-cols-2 للشاشات الأكبر */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-700 mb-1.5 block">
                     Price ($) <span className="text-red-500">*</span>
                   </label>
                   <input
                     value={courseData.coursePrice}
-                    onChange={(e) => updateCourse("coursePrice", e.target.value)}
+                    onChange={(e) =>
+                      updateCourse("coursePrice", Number(e.target.value))
+                    }
                     type="number"
-                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500!"
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -278,9 +282,10 @@ function AddCourse() {
                   </label>
                   <input
                     value={courseData.discount}
-                    onChange={(e) => updateCourse("discount", e.target.value)}
+                    onChange={(e) =>
+                      updateCourse("discount", Number(e.target.value))
+                    }
                     type="number"
-                    suffix="%"
                     min={0}
                     max={100}
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -293,43 +298,46 @@ function AddCourse() {
                 <label className="text-sm font-medium text-gray-700 mb-1.5 block">
                   Description <span className="text-red-500">*</span>
                 </label>
-                <Editor
-                  value={courseData.courseDescription}
-                  onTextChange={(e) =>
-                    updateCourse("courseDescription", e.htmlValue || "")
-                  }
-                  style={{ height: "200px" }}
-                />
+                <div className="w-full overflow-hidden rounded-xl border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+                  <Editor
+                    value={courseData.courseDescription}
+                    onTextChange={(e) =>
+                      updateCourse("courseDescription", e.htmlValue || "")
+                    }
+                    style={{ height: "200px" }}
+                    className="w-full"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
           {/* Course Content */}
-          <div className="bg-white w-full rounded-2xl border border-gray-100 shadow-sm p-6">
-            
-            <div className="flex  items-center justify-between mb-4">
+          <div className="bg-white w-full rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
               <h2 className="text-base font-semibold text-gray-800">
                 Course Content
               </h2>
               <button
                 onClick={addChapter}
-                className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium cursor-pointer w-full sm:w-auto justify-center sm:justify-start"
               >
                 <Plus size={16} /> Add Chapter
               </button>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               {courseData.courseContent.map((chapter, ci) => (
                 <div
-                  key={chapter.chapterId}
+                  key={ci}
                   className="border border-gray-200 rounded-xl overflow-hidden"
                 >
                   {/* Chapter Header */}
-                  <div className="flex items-center gap-3 p-4 bg-gray-50">
+                  {/* تم التعديل: flex-wrap لمنع تداخل العناصر في الموبايل */}
+                  <div className="flex flex-wrap items-center gap-3 p-4 bg-gray-50">
                     <GripVertical
                       size={16}
-                      className="text-gray-400 shrink-0"
+                      className="text-gray-400 shrink-0 mt-1 sm:mt-0"
                     />
                     <input
                       type="text"
@@ -338,15 +346,15 @@ function AddCourse() {
                       onChange={(e) =>
                         updateChapter(ci, "chapterTitle", e.target.value)
                       }
-                      className="flex-1 bg-transparent text-sm font-medium text-gray-800 outline-none placeholder:text-gray-400"
+                      className="flex-1 min-w-[150px] bg-transparent text-sm font-medium text-gray-800 outline-none placeholder:text-gray-400"
                     />
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-xs text-gray-400">
+                    <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-between sm:justify-end mt-1 sm:mt-0">
+                      <span className="text-xs text-gray-400 whitespace-nowrap">
                         {chapter.chapterContent.length} lectures
                       </span>
                       <button
                         onClick={() => toggleChapter(ci)}
-                        className="p-1 text-gray-400 hover:text-gray-600 cursor-pointer"
+                        className="p-1.5 text-gray-400 hover:text-gray-600 cursor-pointer rounded-md hover:bg-gray-200"
                       >
                         {expandedChapters[ci] ? (
                           <ChevronUp size={16} />
@@ -357,7 +365,7 @@ function AddCourse() {
                       {courseData.courseContent.length > 1 && (
                         <button
                           onClick={() => removeChapter(ci)}
-                          className="p-1 text-gray-400 hover:text-red-500 cursor-pointer"
+                          className="p-1.5 text-gray-400 hover:text-red-500 cursor-pointer rounded-md hover:bg-red-50"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -367,13 +375,14 @@ function AddCourse() {
 
                   {/* Lectures */}
                   {expandedChapters[ci] && (
-                    <div className="p-4 space-y-3">
+                    <div className="p-4 space-y-4">
                       {chapter.chapterContent.map((lecture, li) => (
                         <div
-                          key={lecture.lectureId}
+                          key={li}
                           className="bg-gray-50 rounded-xl p-4 space-y-3"
                         >
-                          <div className="flex items-center gap-3">
+                          {/* Lecture Header */}
+                          <div className="flex flex-wrap items-center gap-2">
                             <span className="text-xs font-medium text-gray-400 shrink-0">
                               #{li + 1}
                             </span>
@@ -386,10 +395,10 @@ function AddCourse() {
                                   ci,
                                   li,
                                   "lectureTitle",
-                                  e.target.value,
+                                  e.target.value
                                 )
                               }
-                              className="flex-1 bg-white px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                              className="flex-1 min-w-[150px] bg-white px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <button
                               onClick={() =>
@@ -397,10 +406,10 @@ function AddCourse() {
                                   ci,
                                   li,
                                   "isPreviewFree",
-                                  !lecture.isPreviewFree,
+                                  !lecture.isPreviewFree
                                 )
                               }
-                              className={`flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg font-medium cursor-pointer transition-colors ${
+                              className={`flex items-center gap-1 text-xs px-2.5 py-2 rounded-lg font-medium cursor-pointer transition-colors whitespace-nowrap shrink-0 ${
                                 lecture.isPreviewFree
                                   ? "bg-green-50 text-green-600"
                                   : "bg-gray-100 text-gray-500"
@@ -416,14 +425,16 @@ function AddCourse() {
                             {chapter.chapterContent.length > 1 && (
                               <button
                                 onClick={() => removeLecture(ci, li)}
-                                className="p-1.5 text-gray-400 hover:text-red-500 cursor-pointer"
+                                className="p-2 text-gray-400 hover:text-red-500 cursor-pointer rounded-md hover:bg-red-50 shrink-0"
                               >
                                 <X size={14} />
                               </button>
                             )}
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3">
+                          {/* Lecture Details */}
+                          {/* تم التعديل: grid-cols-1 للموبايل، sm:grid-cols-2 للشاشات الأكبر */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="text-xs text-gray-500 mb-1 block">
                                 YouTube URL
@@ -437,7 +448,7 @@ function AddCourse() {
                                     ci,
                                     li,
                                     "lectureUrl",
-                                    e.target.value,
+                                    e.target.value
                                   )
                                 }
                                 className="w-full bg-white px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500"
@@ -447,6 +458,7 @@ function AddCourse() {
                               <label className="text-xs text-gray-500 mb-1 block">
                                 Duration (minutes)
                               </label>
+                              {/* تم التعديل: إصلاح h-9.5 إلى h-10 (فئة Tailwind قياسية) */}
                               <InputNumber
                                 value={lecture.lectureDuration}
                                 onValueChange={(e) =>
@@ -454,12 +466,12 @@ function AddCourse() {
                                     ci,
                                     li,
                                     "lectureDuration",
-                                    e.value || 0,
+                                    e.value || 0
                                   )
                                 }
                                 min={0}
                                 suffix=" min"
-                                inputClassName="w-full bg-white px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 h-9.5"
+                                inputClassName="w-full bg-white px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500 h-10"
                               />
                             </div>
                           </div>
@@ -468,7 +480,7 @@ function AddCourse() {
 
                       <button
                         onClick={() => addLecture(ci)}
-                        className="w-full py-2 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-blue-300 hover:text-blue-500 transition-colors cursor-pointer flex items-center justify-center gap-1"
+                        className="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 hover:border-blue-300 hover:text-blue-500 transition-colors cursor-pointer flex items-center justify-center gap-1"
                       >
                         <Plus size={14} /> Add Lecture
                       </button>
@@ -481,9 +493,10 @@ function AddCourse() {
         </div>
 
         {/* Right — Thumbnail + Summary */}
-        <div className="space-y-6 sticky top-6">
+        {/* تم التعديل: إضافة lg:sticky لضمان ثبات الشريط الجانبي فقط على الشاشات الكبيرة */}
+        <div className="space-y-6 lg:sticky lg:top-6">
           {/* Thumbnail */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             <h2 className="text-base font-semibold text-gray-800 mb-4">
               Course Thumbnail <span className="text-red-500">*</span>
             </h2>
@@ -506,9 +519,9 @@ function AddCourse() {
                   </div>
                 </div>
               ) : (
-                <div className="border-2 border-dashed border-gray-200 rounded-xl aspect-video flex flex-col items-center justify-center gap-2 hover:border-blue-300 transition-colors">
+                <div className="border-2 border-dashed border-gray-200 rounded-xl aspect-video flex flex-col items-center justify-center gap-2 hover:border-blue-300 transition-colors bg-gray-50">
                   <Upload size={24} className="text-gray-400" />
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-400 text-center px-4">
                     Click to upload thumbnail
                   </p>
                   <p className="text-xs text-gray-300">PNG, JPG up to 5MB</p>
@@ -525,44 +538,44 @@ function AddCourse() {
           </div>
 
           {/* Summary */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6">
             <h2 className="text-base font-semibold text-gray-800 mb-4">
               Summary
             </h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between text-gray-600">
-                <span>Chapters</span>
+                <span className="whitespace-nowrap">Chapters</span>
                 <span className="font-medium">
                   {courseData.courseContent.length}
                 </span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Lectures</span>
+                <span className="whitespace-nowrap">Lectures</span>
                 <span className="font-medium">
                   {courseData.courseContent.reduce(
                     (sum, ch) => sum + ch.chapterContent.length,
-                    0,
+                    0
                   )}
                 </span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Total Duration</span>
+                <span className="whitespace-nowrap">Total Duration</span>
                 <span className="font-medium">
                   {courseData.courseContent.reduce(
                     (sum, ch) =>
                       sum +
                       ch.chapterContent.reduce(
                         (s, l) => s + (l.lectureDuration || 0),
-                        0,
+                        0
                       ),
-                    0,
+                    0
                   )}{" "}
                   min
                 </span>
               </div>
               <div className="border-t border-gray-100 pt-3 flex justify-between text-gray-800">
-                <span className="font-medium">Final Price</span>
-                <span className="font-bold">
+                <span className="font-medium whitespace-nowrap">Final Price</span>
+                <span className="font-bold text-blue-600">
                   $
                   {(
                     courseData.coursePrice -
@@ -577,12 +590,12 @@ function AddCourse() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors cursor-pointer disabled:opacity-70 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-colors cursor-pointer disabled:opacity-70 flex items-center justify-center gap-2 shadow-sm"
           >
             {loading ? (
-              <ClipLoader size={16} color="#fff" />
+              <ClipLoader size={18} color="#fff" />
             ) : (
-              <Plus size={16} />
+              <Plus size={18} />
             )}
             {loading ? "Creating..." : "Create Course"}
           </button>
