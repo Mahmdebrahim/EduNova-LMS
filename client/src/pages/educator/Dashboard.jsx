@@ -30,16 +30,17 @@ function Dashboard() {
   // ── Skeleton Loading State ──
   if (isLoading || !d) {
     return (
-      <div className="space-y-8 pb-8 animate-pulse">
+      <div className="space-y-6 sm:space-y-8 pb-8 animate-pulse px-4 sm:px-0">
         <div>
           <div className="h-8 w-64 bg-gray-200 rounded-lg mb-2" />
           <div className="h-4 w-48 bg-gray-100 rounded-lg" />
         </div>
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        {/* تم التعديل: grid-cols-1 للموبايل، sm:grid-cols-2 للتابلت الصغير، lg:grid-cols-4 للشاشات الكبيرة */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-gray-100 p-5"
+              className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5"
             >
               <div className="flex justify-between mb-4">
                 <div className="h-10 w-10 bg-gray-100 rounded-xl" />
@@ -51,15 +52,16 @@ function Dashboard() {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-5" />
-          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-5" />
+        {/* تم التعديل: lg:grid-cols-2 بدلاً من xl لضمان ظهور الرسوم بجانب بعضها على التابلت */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-4 sm:p-5" />
+          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-4 sm:p-5" />
         </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-5" />
-          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-5" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-4 sm:p-5" />
+          <div className="h-80 bg-white rounded-2xl border border-gray-100 p-4 sm:p-5" />
         </div>
-        <div className="bg-white rounded-2xl border border-gray-100 p-5">
+        <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5">
           <div className="h-6 w-40 bg-gray-200 rounded-lg mb-6" />
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
@@ -117,18 +119,18 @@ function Dashboard() {
     if (value === null || value === undefined) return null;
     if (value > 0)
       return (
-        <span className="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+        <span className="flex items-center gap-1 text-xs font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full whitespace-nowrap">
           <TrendingUp size={12} /> +{value}%
         </span>
       );
     if (value < 0)
       return (
-        <span className="flex items-center gap-1 text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+        <span className="flex items-center gap-1 text-xs font-medium text-red-500 bg-red-50 px-2 py-0.5 rounded-full whitespace-nowrap">
           <TrendingDown size={12} /> {value}%
         </span>
       );
     return (
-      <span className="flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">
+      <span className="flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full whitespace-nowrap">
         <Minus size={12} /> 0%
       </span>
     );
@@ -141,17 +143,10 @@ function Dashboard() {
   };
 
   const revenueChartOptions = {
-    chart: {
-      type: "area",
-      toolbar: { show: true },
-      zoom: { enabled: true },
-    },
+    chart: { type: "area", toolbar: { show: true }, zoom: { enabled: true } },
     stroke: { curve: "smooth", width: 3 },
     colors: ["#3b82f6"],
-    fill: {
-      type: "gradient",
-      gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.05 },
-    },
+    fill: { type: "gradient", gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.05 } },
     xaxis: { categories: d.monthlyRevenue.map((m) => m.month) },
     yaxis: { labels: { formatter: (v) => `${currency}${v}` } },
     tooltip: { y: { formatter: (v) => `${currency}${v.toLocaleString()}` } },
@@ -172,12 +167,7 @@ function Dashboard() {
     colors: ["#10b981"],
     plotOptions: { bar: { borderRadius: 4, horizontal: true } },
     xaxis: { categories: d.coursesSales.map((c) => c.name) },
-    tooltip: {
-      y: {
-        formatter: (v) =>
-          `${currency}${v.toLocaleString()}`,
-      },
-    },
+    tooltip: { y: { formatter: (v) => `${currency}${v.toLocaleString()}` } },
     ...chartBase,
   };
 
@@ -192,10 +182,10 @@ function Dashboard() {
   const ratingChartSeries = d.ratingDistribution.map((r) => r.count);
 
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 sm:space-y-8 pb-8 px-4 sm:px-6 lg:px-8">
       {/* Welcome */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
           Welcome back, {user?.firstName}! 👋
         </h1>
         <p className="text-gray-500 text-sm mt-1">
@@ -204,17 +194,17 @@ function Dashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {kpis.map((kpi, i) => (
           <div
             key={i}
-            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5"
+            className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5"
           >
             <div className="flex items-center justify-between mb-3">
               <div className={`p-2 rounded-xl ${kpi.bg}`}>{kpi.icon}</div>
               <GrowthBadge value={kpi.growth} />
             </div>
-            <p className="text-2xl font-bold text-gray-800">{kpi.value}</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-800">{kpi.value}</p>
             <p className="text-sm font-medium text-gray-600 mt-0.5">
               {kpi.label}
             </p>
@@ -224,76 +214,61 @@ function Dashboard() {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
           <h3 className="text-base font-semibold text-gray-800 mb-4">
             Monthly Revenue
           </h3>
           <ReactApexChart
-
             options={revenueChartOptions}
-            series={[
-              {
-                name: "Revenue",
-                data: d.monthlyRevenue.map((m) => m.revenue),
-
-              },
-            ]}
+            series={[{ name: "Revenue", data: d.monthlyRevenue.map((m) => m.revenue) }]}
             type="area"
             height={250}
+            width="100%"
           />
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
           <h3 className="text-base font-semibold text-gray-800 mb-4">
             Student Growth
           </h3>
           <ReactApexChart
             options={studentsChartOptions}
-            series={[
-              {
-                name: "New Students",
-                data: d.monthlyStudents.map((m) => m.students),
-              },
-            ]}
+            series={[{ name: "New Students", data: d.monthlyStudents.map((m) => m.students) }]}
             type="bar"
             height={250}
+            width="100%"
           />
         </div>
       </div>
 
       {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
           <h3 className="text-base font-semibold text-gray-800 mb-4">
             Top Courses by Revenue
           </h3>
           {d.coursesSales.length === 0 ? (
-            <div className="flex items-center justify-center h-62.5 text-gray-400 text-sm">
+            <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
               No sales data yet
             </div>
           ) : (
             <ReactApexChart
               options={coursesChartOptions}
-              series={[
-                {
-                  name: "Revenue",
-                  data: d.coursesSales.map((c) => c.revenue),
-                },
-              ]}
+              series={[{ name: "Revenue", data: d.coursesSales.map((c) => c.revenue) }]}
               type="bar"
-
               height={250}
+              width="100%"
             />
           )}
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
           <h3 className="text-base font-semibold text-gray-800 mb-4">
             Rating Distribution
           </h3>
           {ratingChartSeries.every((v) => v === 0) ? (
-            <div className="flex items-center justify-center h-62.5 text-gray-400 text-sm">
+            <div className="flex items-center justify-center h-64 text-gray-400 text-sm">
               No ratings yet
             </div>
           ) : (
@@ -302,81 +277,87 @@ function Dashboard() {
               series={ratingChartSeries}
               type="donut"
               height={250}
+              width="100%"
             />
           )}
         </div>
       </div>
 
       {/* Recent Enrollments Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-5">
         <h3 className="text-base font-semibold text-gray-800 mb-4">
           Recent Enrollments
         </h3>
-        <DataTable
-          value={d.recentEnrollments || []}
-          paginator
-          rows={5}
-          rowsPerPageOptions={[5, 10]}
-          emptyMessage="No students enrolled yet"
-          tableStyle={{ minWidth: "40rem" }}
-          className="p-datatable-sm"
-        >
-          <Column
-            header="#"
-            body={(_, { rowIndex }) => (
-              <span className="text-gray-500 text-sm">{rowIndex + 1}</span>
-            )}
-            style={{ width: "5%" }}
-          />
-          <Column
-            header="Student"
-            body={(row) => (
-              <div className="flex items-center gap-3">
-                <img
-                  src={
-                    row.student?.imageUrl ||
-                    `https://ui-avatars.com/api/?name=${row.student?.name || "S"}&background=random`
-                  }
-                  alt={row.student?.name}
-                  className="w-8 h-8 rounded-full object-cover border border-gray-200"
-                />
-                <span className="font-medium text-sm">
-                  {row.student?.name || "Unknown"}
+        
+        {/* تم التعديل: إضافة overflow-x-auto للسماح بالتمرير الأفقي في الموبايل بدون كسر الصفحة */}
+        <div className="overflow-x-auto">
+          <DataTable
+            value={d.recentEnrollments || []}
+            paginator
+            rows={5}
+            rowsPerPageOptions={[5, 10]}
+            emptyMessage="No students enrolled yet"
+            className="p-datatable-sm"
+            responsiveLayout="scroll" // خاص بـ PrimeReact للتعامل مع الموبايل
+          >
+            {/* تم التعديل: إخفاء عمود # في الشاشات الصغيرة جداً لتوفير المساحة */}
+            <Column
+              header="#"
+              body={(_, { rowIndex }) => (
+                <span className="text-gray-500 text-sm">{rowIndex + 1}</span>
+              )}
+              headerClassName="hidden md:table-cell"
+              className="hidden md:table-cell"
+            />
+            <Column
+              header="Student"
+              body={(row) => (
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  <img
+                    src={
+                      row.student?.imageUrl ||
+                      `https://ui-avatars.com/api/?name=${row.student?.name || "S"}&background=random`
+                    }
+                    alt={row.student?.name}
+                    className="w-8 h-8 rounded-full object-cover border border-gray-200 shrink-0"
+                  />
+                  {/* تم التعديل: إضافة truncate لمنع الاسم الطويل من كسر الجدول */}
+                  <span className="font-medium text-sm truncate" title={row.student?.name || "Unknown"}>
+                    {row.student?.name || "Unknown"}
+                  </span>
+                </div>
+              )}
+            />
+            <Column
+              header="Course"
+              body={(row) => (
+                // تم التعديل: إضافة truncate لعنوان الكورس
+                <span className="text-sm text-gray-700 truncate block max-w-[150px] sm:max-w-none" title={row.courseTitle}>
+                  {row.courseTitle}
                 </span>
-              </div>
-            )}
-            style={{ width: "30%" }}
-          />
-          <Column
-            header="Course"
-            body={(row) => (
-              <span className="text-sm text-gray-700">{row.courseTitle}</span>
-            )}
-            style={{ width: "35%" }}
-          />
-          <Column
-            header="Amount"
-            body={(row) => (
-              <span className="text-sm font-medium text-green-600">
-                {currency}
-                {row.amount.toLocaleString()}
-              </span>
-            )}
-            style={{ width: "15%" }}
-          />
-          <Column
-            header="Date"
-            body={(row) => (
-              <span className="text-sm text-gray-400">
-                {new Date(row.date).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                })}
-              </span>
-            )}
-            style={{ width: "15%" }}
-          />
-        </DataTable>
+              )}
+            />
+            <Column
+              header="Amount"
+              body={(row) => (
+                <span className="text-sm font-medium text-green-600 whitespace-nowrap">
+                  {currency}{row.amount.toLocaleString()}
+                </span>
+              )}
+            />
+            <Column
+              header="Date"
+              body={(row) => (
+                <span className="text-sm text-gray-400 whitespace-nowrap">
+                  {new Date(row.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+              )}
+            />
+          </DataTable>
+        </div>
       </div>
     </div>
   );
